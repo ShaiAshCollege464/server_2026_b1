@@ -8,6 +8,8 @@ import server_2026_b.server.responses.WorkListResponse;
 import server_2026_b.server.responses.WorkStatusResponse;
 import server_2026_b.server.service.WorkDayService;
 
+import java.util.Date;
+
 @RestController
 @RequestMapping("/work")
 public class WorkDayController {
@@ -20,6 +22,11 @@ public class WorkDayController {
     @PostMapping("/enter")
     public BasicResponse enter(@RequestBody EnterRequest request){
         return workDayService.enter(request);
+    }
+
+    @RequestMapping ("/ping")
+    public String ping () {
+        return new Date().toString();
     }
 
     @PostMapping("/exit")
