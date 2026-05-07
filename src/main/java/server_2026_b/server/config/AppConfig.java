@@ -9,6 +9,7 @@ import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import server_2026_b.server.utils.TokenUtils;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -38,6 +39,8 @@ public class AppConfig {
         String dbSchema = env.getProperty("DB_SCHEMA", SCHEMA);
         String dbPass = env.getProperty("DB_PASSWORD", DB_PASSWORD);
         String host = env.getProperty("DB_HOST", DB_HOST);
+        String normalizedHost = host.trim().toLowerCase();
+        TokenUtils.setProd(!normalizedHost.equals("localhost") && !normalizedHost.equals("127.0.0.1"));
         Integer port = env.getProperty("DB_PORT", Integer.class, DB_PORT);
 
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -86,7 +89,11 @@ public class AppConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**").allowedOrigins("*");
+                registry.addMapping("/**")
+                        .allowedOrigins("http://localhost:5173")
+                        .allowedMethods("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS")
+                        .allowedHeaders("*")
+                        .allowCredentials(true);
             }
         };
     }
