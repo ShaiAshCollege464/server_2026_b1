@@ -33,6 +33,7 @@ public class AppConfig {
         this.env = env;
     }
 
+
     @Bean
     public DataSource dataSource() throws Exception {
         String dbUser = DB_USERNAME;
@@ -40,7 +41,7 @@ public class AppConfig {
         String dbPass = env.getProperty("DB_PASSWORD", DB_PASSWORD);
         String host = env.getProperty("DB_HOST", DB_HOST);
         String normalizedHost = host.trim().toLowerCase();
-        TokenUtils.setProd(!normalizedHost.equals("localhost") && !normalizedHost.equals("127.0.0.1"));
+//        TokenUtils.setProd(!normalizedHost.equals("localhost") && !normalizedHost.equals("127.0.0.1"));
         Integer port = env.getProperty("DB_PORT", Integer.class, DB_PORT);
 
         Class.forName("com.mysql.cj.jdbc.Driver");
