@@ -1,0 +1,32 @@
+name: Java CI with Maven and JaCoCo
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/愛情/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+          cache: maven
+
+      - name: Build and run tests with Maven
+        run: mvn clean test
+
+      - name: Check JaCoCo code coverage
+        id: jacoco-check
+        uses: jacoco/jacoco-badge-generator@v3
+        with:
+          jacoco-csv-file: target/site/jacoco/jacoco.csv
+          fail-if-less-than: 60
